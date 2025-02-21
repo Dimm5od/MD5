@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Офлайн хеширование</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; background-color: #f4f4f4; }
+        .container { width: 80%; max-width: 800px; margin: auto; text-align: left; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+        textarea { width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; resize: none; }
+        button { 
+            display: block; width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; 
+            background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; 
+            transition: 0.3s; 
+        }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; }
+        .hash-container { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .hash-label { font-weight: bold; width: 70px; }
+        .hash { cursor: pointer; color: #007bff; text-decoration: underline; word-break: break-all; flex: 1; }
+        .copied { 
+            background: rgba(0, 0, 0, 0.8); color: white; padding: 5px 10px; font-size: 12px; 
+            border-radius: 5px; position: absolute; display: none; transform: translateY(-25px);
+        }
+        .hash-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+    </style>
+    <script src="crypto-js.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h2 style="text-align: center;">Офлайн хеширование MD5, SHA-1, SHA-256</h2>
+        <textarea id="inputText" rows="4" placeholder="Введите строку"></textarea>
+        <button onclick="hashString()">Хешировать</button>
+
+        <div class="result">
+            <div class="hash-container">
+                <span class="hash-label">MD5:</span>
+                <div class="hash-wrapper">
+                    <span class="hash" id="md5Result" onclick="copyToClipboard(this)"></span>
+                    <span class="copied">Скопировано!</span>
+                </div>
+            </div>
+            <div class="hash-container">
+                <span class="hash-label">SHA-1:</span>
+                <div class="hash-wrapper">
+                    <span class="hash" id="sha1Result" onclick="copyToClipboard(this)"></span>
+                    <span class="copied">Скопировано!</span>
+                </div>
+            </div>
+            <div class="hash-container">
+                <span class="hash-label">SHA-256:</span>
+                <div class="hash-wrapper">
+                    <span class="hash" id="sha256Result" onclick="copyToClipboard(this)"></span>
+                    <span class="copied">Скопировано!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function hashString() {
+            let input = document.getElementById("inputText").value;
+            document.getElementById("md5Result").textContent = CryptoJS.MD5(input).toString();
+            document.getElementById("sha1Result").textContent = CryptoJS.SHA1(input).toString();
+            document.getElementById("sha256Result").textContent = CryptoJS.SHA256(input).toString();
+        }
+
+        function copyToClipboard(element) {
+            navigator.clipboard.writeText(element.textContent).then(() => {
+                let copiedText = element.nextElementSibling;
+                copiedText.style.display = "inline";
+                setTimeout(() => copiedText.style.display = "none", 1500);
+            });
+        }
+    </script>
+
+</body>
+</html>
